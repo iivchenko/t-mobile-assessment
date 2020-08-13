@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stroopwafels.Web", "src\Stroopwafels.Web\Stroopwafels.Web.csproj", "{21416F0E-000B-45CB-B8C6-C485A937F965}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stroopwafels.Ordering", "src\Stroopwafels.Ordering\Stroopwafels.Ordering.csproj", "{F2BED2BF-1DEE-4605-9568-559B526CAF8A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{21416F0E-000B-45CB-B8C6-C485A937F965}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21416F0E-000B-45CB-B8C6-C485A937F965}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21416F0E-000B-45CB-B8C6-C485A937F965}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21416F0E-000B-45CB-B8C6-C485A937F965}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2BED2BF-1DEE-4605-9568-559B526CAF8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2BED2BF-1DEE-4605-9568-559B526CAF8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2BED2BF-1DEE-4605-9568-559B526CAF8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2BED2BF-1DEE-4605-9568-559B526CAF8A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DAAF5D32-B535-4741-8199-F815A5A8C586}
+	EndGlobalSection
+EndGlobal
