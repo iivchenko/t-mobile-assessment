@@ -1,0 +1,36 @@
+﻿@model Stroopwafels.Models.OrderDetailsViewModel
+@{
+    ViewBag.Title = "Stroopwafels bestellen";
+}
+
+<div class="jumbotron">
+    <h1>Stroopwafels bestellen</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        @using (Html.BeginForm("GetQuotes", "Stroopwafel", FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary()
+
+            <h2>Bestelling</h2>
+            <p>
+                Voer hier uw bestelling in:
+
+                @for (var i = 0; i < Model.OrderRows.Count; i++)
+                {
+                    @Html.HiddenFor(m => Model.OrderRows[i].Type);
+                    <div class="row">
+                        <div>@Html.Label(Model.OrderRows[i].DisplayName)</div>
+                        <div>@Html.TextBoxFor(m => Model.OrderRows[i].Amount)</div>
+                    </div>
+                }
+            </p>
+            <p><input type="submit" value="Prijzen ophalen" class="btn btn-default" />
+            </p>
+
+        }
+    </div>
+    
+</div>
