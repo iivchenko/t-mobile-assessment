@@ -3,6 +3,7 @@ using Stroopwafels.Ordering;
 using Stroopwafels.Ordering.Services;
 using Stroopwafels.Ordering.Services.SupplierA;
 using Stroopwafels.Ordering.Services.SupplierB;
+using Stroopwafels.Ordering.Services.SupplierC;
 
 namespace Stroopwafels.Web
 {
@@ -19,6 +20,11 @@ namespace Stroopwafels.Web
             CreateMap<OrderProduct, SupplierBOrderProduct>();
             CreateMap<OrderLine, SupplierBOrderLine>();
             CreateMap<Order, SupplierBOrder>();
+
+            CreateMap<SupplierCStroopwafel, Stroopwafel>();
+            CreateMap<OrderProduct, SupplierCOrderProduct>();
+            CreateMap<OrderLine, SupplierCOrderLine>();
+            CreateMap<Order, SupplierCOrder>();
         }
     }
 }

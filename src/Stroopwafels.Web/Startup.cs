@@ -12,6 +12,7 @@ using Stroopwafels.Ordering;
 using Stroopwafels.Ordering.Services;
 using Stroopwafels.Ordering.Services.SupplierA;
 using Stroopwafels.Ordering.Services.SupplierB;
+using Stroopwafels.Ordering.Services.SupplierC;
 
 namespace Stroopwafels.Web
 {
@@ -42,6 +43,10 @@ namespace Stroopwafels.Web
             services
                 .AddRefitClient<ISupplierBClient>()
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(Configuration.GetValue<string>("Suppliers:SupplierBUrl")));
+
+            services
+                .AddRefitClient<ISupplierCClient>()
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(Configuration.GetValue<string>("Suppliers:SupplierCUrl")));
 
             services.AddScoped<IStroopwafelSupplierService, StroopwafelSupplierAService>();
             services.AddScoped<IStroopwafelSupplierService, StroopwafelSupplierBService>();
