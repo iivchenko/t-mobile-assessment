@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Stroopwafels.Ordering.Services
 {
@@ -36,7 +37,7 @@ namespace Stroopwafels.Ordering.Services
             return !isHoliday;
         }
 
-        public Quote GetQuote(IList<KeyValuePair<StroopwafelType, int>> orderDetails)
+        public Task<Quote> GetQuote(IList<KeyValuePair<StroopwafelType, int>> orderDetails)
         {
             if (!this.IsAvailable)
             {
@@ -47,14 +48,18 @@ namespace Stroopwafels.Ordering.Services
             var stroopwafels = result.ToObject<IList<Stroopwafel>>();
 
             var builder = new QuoteBuilder();
-            return builder.CreateOrder(orderDetails, stroopwafels, new SupplierB());
+            var order = builder.CreateOrder(orderDetails, stroopwafels, new SupplierB());
+
+            return Task.FromResult(order);
         }
 
-        public void Order(IList<KeyValuePair<StroopwafelType, int>> quoteLines)
+        public Task Order(IList<KeyValuePair<StroopwafelType, int>> quoteLines)
         {
             var builder = new OrderBuilder();
             Order order = builder.CreateOrder(quoteLines);
             base.ExecutePost(OrderUri, order);
+
+            return Task.CompletedTask;
         }
     }
 }

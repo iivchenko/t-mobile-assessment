@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace Stroopwafels.Ordering.Services
 {
@@ -18,21 +18,25 @@ namespace Stroopwafels.Ordering.Services
         {
         }
 
-        public Quote GetQuote(IList<KeyValuePair<StroopwafelType, int>> orderDetails)
+        public Task<Quote> GetQuote(IList<KeyValuePair<StroopwafelType, int>> orderDetails)
         {
             var result = base.ExecuteGet(ProductsUri);
             var stroopwafels = result.ToObject<IList<Stroopwafel>>();
 
             var builder = new QuoteBuilder();
 
-            return builder.CreateOrder(orderDetails, stroopwafels, new SupplierC());
+            var order = builder.CreateOrder(orderDetails, stroopwafels, new SupplierC());
+
+            return Task.FromResult(order);
         }
 
-        public void Order(IList<KeyValuePair<StroopwafelType, int>> quoteLines)
+        public Task Order(IList<KeyValuePair<StroopwafelType, int>> quoteLines)
         {
             var builder = new OrderBuilder();
             Order order = builder.CreateOrder(quoteLines);
             base.ExecutePost(OrderUri, order);
+
+            return Task.CompletedTask;
         }
     }
 }

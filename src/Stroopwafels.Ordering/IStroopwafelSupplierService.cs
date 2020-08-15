@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Stroopwafels.Ordering
 {
@@ -8,8 +9,8 @@ namespace Stroopwafels.Ordering
 
         bool IsAvailable { get; }
 
-        Quote GetQuote(IList<KeyValuePair<StroopwafelType, int>> orderDetails);
+        Task<Quote> GetQuote(IList<KeyValuePair<StroopwafelType, int>> orderDetails);
 
-        void Order(IList<KeyValuePair<StroopwafelType, int>> quote);
+        Task Order(IList<KeyValuePair<StroopwafelType, int>> quote);
     }
 }

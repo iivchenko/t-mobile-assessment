@@ -1,13 +1,16 @@
 using System;
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Refit;
 using Stroopwafels.Application.Queries;
 using Stroopwafels.Ordering;
 using Stroopwafels.Ordering.Services;
+using Stroopwafels.Ordering.Services.SupplierA;
 
 namespace Stroopwafels.Web
 {
@@ -24,11 +27,15 @@ namespace Stroopwafels.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            // TODO: hack. looks like mediator can't see handlers if rsponse types are in diffreent library
+            // TODO: hack. looks like mediator can't see handlers if rsponse types are in different library
             services.AddMediatR(typeof(QuotesQueryHandler).Assembly);
 
             services.AddScoped<IHttpClientWrapper, HttpClientWrapper>();
+            services
+                .AddRefitClient<ISupplierAClient>()
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(Configuration.GetValue<string>("Suppliers:SupplierAUrl")));
 
             services.AddScoped<IStroopwafelSupplierService, StroopwafelSupplierAService>();
             services.AddScoped<IStroopwafelSupplierService, StroopwafelSupplierBService>();

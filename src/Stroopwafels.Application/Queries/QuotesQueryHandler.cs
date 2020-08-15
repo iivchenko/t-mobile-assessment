@@ -16,12 +16,10 @@ namespace Stroopwafels.Application.Queries
             _stroopwafelSupplierServices = stroopwafelSupplierServices;
         }
 
-        public Task<IEnumerable<Quote>> Handle(QuotesQuery query, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Quote>> Handle(QuotesQuery query, CancellationToken cancellationToken)
         {
-            // TODO: Make async
-            var quotes = _stroopwafelSupplierServices.Where(service => service.IsAvailable).Select(service => service.GetQuote(query.OrderLines)).ToList();
-
-            return Task.FromResult(quotes.AsEnumerable());
+            var tasks = _stroopwafelSupplierServices.Where(service => service.IsAvailable).Select(async service => await service.GetQuote(query.OrderLines));
+            return await Task.WhenAll(tasks);
         }
     }
 }
