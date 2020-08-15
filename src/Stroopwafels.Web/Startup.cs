@@ -34,8 +34,6 @@ namespace Stroopwafels.Web
             // TODO: hack. looks like mediator can't see handlers if rsponse types are in different library
             services.AddMediatR(typeof(QuotesQueryHandler).Assembly);
 
-            services.AddScoped<IHttpClientWrapper, HttpClientWrapper>();
-
             services
                 .AddRefitClient<ISupplierAClient>()
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(Configuration.GetValue<string>("Suppliers:SupplierAUrl")));
