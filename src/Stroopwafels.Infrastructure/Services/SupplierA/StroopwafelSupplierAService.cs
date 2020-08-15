@@ -11,8 +11,6 @@ namespace Stroopwafels.Infrastructure.Services.SupplierA
         private readonly ISupplierAClient _client;
         private readonly IMapper _mapper;
 
-        public ISupplier Supplier => new Stroopwafels.Application.Domain.SupplierA();
-
         // todo: convert to availability decorator; or use circuit braker; or polly
         public bool IsAvailable => true;
 
@@ -20,6 +18,16 @@ namespace Stroopwafels.Infrastructure.Services.SupplierA
         {
             _client = client;
             _mapper = mapper;
+        }
+
+        public Task<string> GetName()
+        {
+            return Task.FromResult("Leverancier A");
+        }
+
+        public Task<decimal> CalculateShipingCost(decimal totalPrice)
+        {
+            return Task.FromResult(5m);
         }
 
         public async Task<IEnumerable<Stroopwafel>> QueryStroopwafels()

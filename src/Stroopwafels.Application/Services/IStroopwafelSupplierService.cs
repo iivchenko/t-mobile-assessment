@@ -6,9 +6,11 @@ namespace Stroopwafels.Application.Services
 {
     public interface IStroopwafelSupplierService
     {
-        ISupplier Supplier { get; }
-
         bool IsAvailable { get; }
+
+        Task<string> GetName();
+
+        Task<decimal> CalculateShipingCost(decimal totalPrice);
 
         Task<IEnumerable<Stroopwafel>> QueryStroopwafels();
 

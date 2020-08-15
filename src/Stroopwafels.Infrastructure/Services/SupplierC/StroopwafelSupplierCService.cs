@@ -8,10 +8,10 @@ namespace Stroopwafels.Infrastructure.Services.SupplierC
 {
     public class StroopwafelSupplierCService : IStroopwafelSupplierService
     {
+        private const int ShippingCostPercentage = 5;
+
         private readonly ISupplierCClient _client;
         private readonly IMapper _mapper;
-
-        public ISupplier Supplier => new Stroopwafels.Application.Domain.SupplierC();
 
         public bool IsAvailable => true;
 
@@ -19,6 +19,18 @@ namespace Stroopwafels.Infrastructure.Services.SupplierC
         {
             _client = client;
             _mapper = mapper;
+        }
+
+        public Task<string> GetName()
+        {
+            return Task.FromResult("Leverancier C");
+        }
+
+        public Task<decimal> CalculateShipingCost(decimal totalPrice)
+        {
+            var price = totalPrice / 100 * ShippingCostPercentage;
+
+            return Task.FromResult(price);
         }
 
         public async Task<IEnumerable<Stroopwafel>> QueryStroopwafels()

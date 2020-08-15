@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Stroopwafels.Application.Queries
 {
-    public sealed class QuotesQuery : IRequest<IEnumerable<Quote>>
+    public sealed class QuotesQuery : IRequest<IEnumerable<QuotesQueryResponse>>
     {
         public IList<KeyValuePair<StroopwafelType, int>> OrderLines { get; }
 

@@ -19,14 +19,18 @@ namespace Stroopwafels.Application.Commands
 
         public async Task<Unit> Handle(OrderCommand command, CancellationToken cancellationToken)
         {
-            var stroopwafelSupplierService = 
-                _stroopwafelSupplierServices
-                    .Single(service => service.Supplier.Name.Equals(command.Supplier, StringComparison.InvariantCultureIgnoreCase));
+            foreach(var service in _stroopwafelSupplierServices)
+            {
+                var name = await service.GetName();
 
-            var builder = new Domain.OrderBuilder();
-            var order = builder.CreateOrder(command.OrderLines);
+                if(name.Equals(command.Supplier, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var builder = new Domain.OrderBuilder();
+                    var order = builder.CreateOrder(command.OrderLines);
 
-            await stroopwafelSupplierService.MakeOrder(order);
+                    await service.MakeOrder(order);
+                }
+            }
 
             return Unit.Value;
         }

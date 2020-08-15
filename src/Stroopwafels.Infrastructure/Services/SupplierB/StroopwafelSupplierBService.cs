@@ -10,10 +10,12 @@ namespace Stroopwafels.Infrastructure.Services.SupplierB
 {
     public sealed class StroopwafelSupplierBService : IStroopwafelSupplierService
     {
+        private const decimal ShippingCostLimit = 50m;
+        private const decimal ShippingCostAboveLimit = 0m;
+        private const decimal ShippingCostUnderLimit = 5m;
+
         private readonly ISupplierBClient _client;
         private readonly IMapper _mapper;
-
-        public ISupplier Supplier => new Stroopwafels.Application.Domain.SupplierB();
 
         private static readonly IList<DateTime> PublicHolidays = new List<DateTime>
         {
@@ -23,6 +25,18 @@ namespace Stroopwafels.Infrastructure.Services.SupplierB
         }; 
 
         public bool IsAvailable => this.GetAvailability();
+
+        public Task<string> GetName()
+        {
+            return Task.FromResult("Leverancier B");
+        }
+
+        public Task<decimal> CalculateShipingCost(decimal totalPrice)
+        {
+            var price = totalPrice > ShippingCostLimit ? ShippingCostAboveLimit : ShippingCostUnderLimit;
+
+            return Task.FromResult(price);
+        }
 
         public StroopwafelSupplierBService(ISupplierBClient client, IMapper mapper)
         {

@@ -55,20 +55,20 @@ namespace Stroopwafels.Web.Controllers
                 {
                     viewModel.Quotes.Add(new Models.Quote
                     {
-                        SupplierName = quote.Supplier.Name,
-                        TotalAmount = quote.TotalPricePresentation
+                        SupplierName = quote.Supplier,
+                        TotalAmount = quote.TotalPrice.ToString("C")
                     });
                 }
 
                 viewModel.OrderRows = formModel.OrderRows;
-                viewModel.SelectedSupplier = quotes.OrderBy(q => q.TotalPrice).First().Supplier.Name;
+                viewModel.SelectedSupplier = quotes.OrderBy(q => q.TotalPrice).First().Supplier;
 
                 return View("_Quotes", viewModel);
             }
             return Index();
         }
 
-        private async Task<IEnumerable<Stroopwafels.Application.Domain.Quote>> GetQuotesFor(IList<KeyValuePair<StroopwafelType, int>> orderDetails)
+        private async Task<IEnumerable<QuotesQueryResponse>> GetQuotesFor(IList<KeyValuePair<StroopwafelType, int>> orderDetails)
         {
             var query = new QuotesQuery(orderDetails);
 
