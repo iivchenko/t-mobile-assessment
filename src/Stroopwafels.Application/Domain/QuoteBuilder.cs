@@ -20,5 +20,18 @@ namespace Stroopwafels.Application.Domain
 
             return new Quote(orderLines, supplier);
         }
+
+        public Quote CreateOrder(IList<KeyValuePair<StroopwafelType, int>> orderDetails, IList<Stroopwafel> stroopwafels, decimal shipingCost)
+        {
+            var orderLines = new List<QuoteLine>();
+
+            foreach (var orderLine in orderDetails)
+            {
+                var stroopwafel = stroopwafels.First(s => s.Type == orderLine.Key);
+                orderLines.Add(new QuoteLine(orderLine.Value, stroopwafel));
+            }
+
+            return new Quote(orderLines, shipingCost);
+        }
     }
 }

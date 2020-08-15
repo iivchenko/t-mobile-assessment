@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Stroopwafels.Application.Domain;
+using Stroopwafels.Application.Services;
 
 namespace Stroopwafels.Infrastructure.Services.SupplierB
 {
@@ -40,7 +41,7 @@ namespace Stroopwafels.Infrastructure.Services.SupplierB
             return !isHoliday;
         }
 
-        public async Task<Quote> GetQuote(IList<KeyValuePair<StroopwafelType, int>> orderDetails)
+        public async Task<IEnumerable<Stroopwafel>> QueryStroopwafels()
         {
             if (!this.IsAvailable)
             {
@@ -48,12 +49,8 @@ namespace Stroopwafels.Infrastructure.Services.SupplierB
             }
 
             var supplierStroopwafels = await _client.GetStroopwafels();
-            var stroopwafels = _mapper.Map<IEnumerable<Stroopwafel>>(supplierStroopwafels);
 
-            var builder = new QuoteBuilder();
-            var order = builder.CreateOrder(orderDetails, stroopwafels.ToList(), Supplier);
-
-            return order;
+            return _mapper.Map<IEnumerable<Stroopwafel>>(supplierStroopwafels);
         }
 
         public async Task Order(IList<KeyValuePair<StroopwafelType, int>> quoteLines)

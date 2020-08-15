@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Refit;
 using Stroopwafels.Application.Queries;
-using Stroopwafels.Application.Domain;
+using Stroopwafels.Application.Services;
 using Stroopwafels.Infrastructure.Services.SupplierA;
 using Stroopwafels.Infrastructure.Services.SupplierB;
 using Stroopwafels.Infrastructure.Services.SupplierC;

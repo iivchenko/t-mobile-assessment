@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Stroopwafels.Application.Domain;
+using Stroopwafels.Application.Services;
 
 namespace Stroopwafels.Infrastructure.Services.SupplierA
 {
@@ -22,14 +23,11 @@ namespace Stroopwafels.Infrastructure.Services.SupplierA
             _mapper = mapper;
         }
 
-        public async Task<Quote> GetQuote(IList<KeyValuePair<StroopwafelType, int>> orderDetails)
+        public async Task<IEnumerable<Stroopwafel>> QueryStroopwafels()
         {
             var supplierStroopwafels = await _client.GetStroopwafels();
-            var stroopwafels = _mapper.Map<IEnumerable<Stroopwafel>>(supplierStroopwafels);
 
-            var builder = new QuoteBuilder();
-
-            return builder.CreateOrder(orderDetails, stroopwafels.ToList(), Supplier);
+            return _mapper.Map<IEnumerable<Stroopwafel>>(supplierStroopwafels);
         }
 
         public async Task Order(IList<KeyValuePair<StroopwafelType, int>> quoteLines)

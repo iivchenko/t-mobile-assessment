@@ -25,5 +25,9 @@ namespace Stroopwafels.Application.Domain
             this.OrderLines = orderLines;
             this.Supplier = supplier;
         }
+
+        public Quote(IList<QuoteLine> orderLines, decimal shipingCost)
+        {
+        }
     }
 }
