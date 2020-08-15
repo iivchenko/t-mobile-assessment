@@ -4,7 +4,7 @@ namespace Stroopwafels.Ordering.Services
 {
     public class Order
     {
-        public IList<OrderLine> ProductsAndAmounts { get; }
+        public IEnumerable<OrderLine> ProductsAndAmounts { get; }
 
         public Order(IList<OrderLine> productsAndAmounts)
         {

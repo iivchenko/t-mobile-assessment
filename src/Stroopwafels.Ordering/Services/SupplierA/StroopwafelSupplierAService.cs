@@ -12,7 +12,7 @@ namespace Stroopwafels.Ordering.Services.SupplierA
 
         public ISupplier Supplier => new Ordering.SupplierA();
 
-        // todo: convert to availability decorator
+        // todo: convert to availability decorator; or use circuit braker; or polly
         public bool IsAvailable => true;
 
         public StroopwafelSupplierAService(ISupplierAClient client, IMapper mapper)

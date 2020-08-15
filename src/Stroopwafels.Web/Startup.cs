@@ -11,6 +11,7 @@ using Stroopwafels.Application.Queries;
 using Stroopwafels.Ordering;
 using Stroopwafels.Ordering.Services;
 using Stroopwafels.Ordering.Services.SupplierA;
+using Stroopwafels.Ordering.Services.SupplierB;
 
 namespace Stroopwafels.Web
 {
@@ -33,9 +34,14 @@ namespace Stroopwafels.Web
             services.AddMediatR(typeof(QuotesQueryHandler).Assembly);
 
             services.AddScoped<IHttpClientWrapper, HttpClientWrapper>();
+
             services
                 .AddRefitClient<ISupplierAClient>()
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(Configuration.GetValue<string>("Suppliers:SupplierAUrl")));
+
+            services
+                .AddRefitClient<ISupplierBClient>()
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(Configuration.GetValue<string>("Suppliers:SupplierBUrl")));
 
             services.AddScoped<IStroopwafelSupplierService, StroopwafelSupplierAService>();
             services.AddScoped<IStroopwafelSupplierService, StroopwafelSupplierBService>();
