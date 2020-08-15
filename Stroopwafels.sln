@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stroopwafels.Web", "src\Str
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stroopwafels.Ordering", "src\Stroopwafels.Ordering\Stroopwafels.Ordering.csproj", "{F2BED2BF-1DEE-4605-9568-559B526CAF8A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stroopwafels.Application", "src\Stroopwafels.Application\Stroopwafels.Application.csproj", "{CC977E86-824B-4212-92E6-A08D43D05647}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stroopwafels.Infrastructure", "src\Stroopwafels.Infrastructure\Stroopwafels.Infrastructure.csproj", "{5C7E64F9-3C89-4037-8D70-DDEDB8457620}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{F2BED2BF-1DEE-4605-9568-559B526CAF8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2BED2BF-1DEE-4605-9568-559B526CAF8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F2BED2BF-1DEE-4605-9568-559B526CAF8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC977E86-824B-4212-92E6-A08D43D05647}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC977E86-824B-4212-92E6-A08D43D05647}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC977E86-824B-4212-92E6-A08D43D05647}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC977E86-824B-4212-92E6-A08D43D05647}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C7E64F9-3C89-4037-8D70-DDEDB8457620}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C7E64F9-3C89-4037-8D70-DDEDB8457620}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C7E64F9-3C89-4037-8D70-DDEDB8457620}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C7E64F9-3C89-4037-8D70-DDEDB8457620}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
