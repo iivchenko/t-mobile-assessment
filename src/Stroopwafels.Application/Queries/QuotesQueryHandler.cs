@@ -18,7 +18,10 @@ namespace Stroopwafels.Application.Queries
 
         public async Task<IEnumerable<QuotesQueryResponse>> Handle(QuotesQuery query, CancellationToken cancellationToken)
         {
-            var tasks = _stroopwafelSupplierServices.Where(service => service.IsAvailable).Select(async x => await GetQuotes(x, query));
+            var tasks =
+                _stroopwafelSupplierServices
+                    .Select(async x => await GetQuotes(x, query))
+                    .Where(x => x != null);
 
             return await Task.WhenAll(tasks);
         }
@@ -26,6 +29,11 @@ namespace Stroopwafels.Application.Queries
         private async Task<QuotesQueryResponse> GetQuotes(IStroopwafelSupplierService service, QuotesQuery query)
         {
             var stroopwafels = await service.QueryStroopwafels();
+
+            if(!stroopwafels.Any())
+            {
+                return null;
+            }
 
             var quoteItems = new List<QuotesQueryItem>();
 

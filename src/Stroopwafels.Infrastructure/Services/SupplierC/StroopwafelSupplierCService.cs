@@ -13,8 +13,6 @@ namespace Stroopwafels.Infrastructure.Services.SupplierC
         private readonly ISupplierCClient _client;
         private readonly IMapper _mapper;
 
-        public bool IsAvailable => true;
-
         public StroopwafelSupplierCService(ISupplierCClient client, IMapper mapper)
         {
             _client = client;

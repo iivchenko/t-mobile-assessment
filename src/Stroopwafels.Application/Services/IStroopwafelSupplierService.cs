@@ -6,8 +6,6 @@ namespace Stroopwafels.Application.Services
 {
     public interface IStroopwafelSupplierService
     {
-        bool IsAvailable { get; }
-
         Task<string> GetName();
 
         Task<decimal> CalculateShipingCost(decimal totalPrice);

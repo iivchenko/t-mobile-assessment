@@ -24,8 +24,6 @@ namespace Stroopwafels.Infrastructure.Services.SupplierB
             new DateTime(2016, 12, 26)
         }; 
 
-        public bool IsAvailable => this.GetAvailability();
-
         public Task<string> GetName()
         {
             return Task.FromResult("Leverancier B");
@@ -57,9 +55,9 @@ namespace Stroopwafels.Infrastructure.Services.SupplierB
 
         public async Task<IEnumerable<Stroopwafel>> QueryStroopwafels()
         {
-            if (!this.IsAvailable)
+            if (!GetAvailability())
             {
-                return null;
+                return Enumerable.Empty<Stroopwafel>();
             }
 
             var supplierStroopwafels = await _client.GetStroopwafels();

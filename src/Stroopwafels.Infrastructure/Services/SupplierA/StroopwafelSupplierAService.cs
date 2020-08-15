@@ -11,9 +11,6 @@ namespace Stroopwafels.Infrastructure.Services.SupplierA
         private readonly ISupplierAClient _client;
         private readonly IMapper _mapper;
 
-        // todo: convert to availability decorator; or use circuit braker; or polly
-        public bool IsAvailable => true;
-
         public StroopwafelSupplierAService(ISupplierAClient client, IMapper mapper)
         {
             _client = client;
