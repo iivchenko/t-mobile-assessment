@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Stroopwafels.Application.Domain;
 using Stroopwafels.Application.Services;
@@ -30,10 +29,8 @@ namespace Stroopwafels.Infrastructure.Services.SupplierA
             return _mapper.Map<IEnumerable<Stroopwafel>>(supplierStroopwafels);
         }
 
-        public async Task Order(IList<KeyValuePair<StroopwafelType, int>> quoteLines)
+        public async Task MakeOrder(Order order)
         {
-            var builder = new OrderBuilder();
-            var order = builder.CreateOrder(quoteLines);
             var supplierOrder = _mapper.Map<SupplierAOrder>(order);
 
             await _client.Order(supplierOrder);

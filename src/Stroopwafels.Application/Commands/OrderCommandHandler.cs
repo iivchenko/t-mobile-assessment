@@ -17,16 +17,18 @@ namespace Stroopwafels.Application.Commands
             _stroopwafelSupplierServices = stroopwafelSupplierServices;
         }
 
-        public Task<Unit> Handle(OrderCommand command, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(OrderCommand command, CancellationToken cancellationToken)
         {
-            // TODO: make async
-            var stroopwafelSupplierService = this._stroopwafelSupplierServices.Single(
-                service =>
-                    service.Supplier.Name.Equals(command.Supplier, StringComparison.InvariantCultureIgnoreCase));
+            var stroopwafelSupplierService = 
+                _stroopwafelSupplierServices
+                    .Single(service => service.Supplier.Name.Equals(command.Supplier, StringComparison.InvariantCultureIgnoreCase));
 
-            stroopwafelSupplierService.Order(command.OrderLines);
+            var builder = new Domain.OrderBuilder();
+            var order = builder.CreateOrder(command.OrderLines);
 
-            return Unit.Task;
+            await stroopwafelSupplierService.MakeOrder(order);
+
+            return Unit.Value;
         }
     }
 }

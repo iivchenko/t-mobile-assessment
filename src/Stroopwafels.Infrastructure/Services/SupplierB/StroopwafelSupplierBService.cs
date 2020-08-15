@@ -53,10 +53,8 @@ namespace Stroopwafels.Infrastructure.Services.SupplierB
             return _mapper.Map<IEnumerable<Stroopwafel>>(supplierStroopwafels);
         }
 
-        public async Task Order(IList<KeyValuePair<StroopwafelType, int>> quoteLines)
+        public async Task MakeOrder(Order order)
         {
-            var builder = new OrderBuilder();
-            var order = builder.CreateOrder(quoteLines);
             var supplierOrder = _mapper.Map<SupplierBOrder>(order);
 
             await _client.Order(supplierOrder);

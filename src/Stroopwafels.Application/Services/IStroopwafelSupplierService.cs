@@ -12,6 +12,6 @@ namespace Stroopwafels.Application.Services
 
         Task<IEnumerable<Stroopwafel>> QueryStroopwafels();
 
-        Task Order(IList<KeyValuePair<StroopwafelType, int>> quote);
+        Task MakeOrder(Order order);
     }
 }
