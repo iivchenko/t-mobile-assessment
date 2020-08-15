@@ -23,7 +23,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Stroopwafels.Application\Stroopwafels.Application.csproj" />
     <ProjectReference Include="..\Stroopwafels.Infrastructure\Stroopwafels.Infrastructure.csproj" />
-    <ProjectReference Include="..\Stroopwafels.Ordering\Stroopwafels.Ordering.csproj" />
   </ItemGroup>
 
 </Project>

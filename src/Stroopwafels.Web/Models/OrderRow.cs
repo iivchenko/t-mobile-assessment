@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using Stroopwafels.Ordering;
+using Stroopwafels.Application.Domain;
 
 namespace Stroopwafels.Web.Models
 {

@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using Stroopwafels.Ordering;
+using Stroopwafels.Application.Domain;
 using System.Collections.Generic;
 
 namespace Stroopwafels.Application.Queries

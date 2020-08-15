@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using Stroopwafels.Ordering;
+using Stroopwafels.Application.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;

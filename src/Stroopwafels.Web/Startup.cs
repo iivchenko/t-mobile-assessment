@@ -8,11 +8,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Refit;
 using Stroopwafels.Application.Queries;
-using Stroopwafels.Ordering;
-using Stroopwafels.Ordering.Services;
-using Stroopwafels.Ordering.Services.SupplierA;
-using Stroopwafels.Ordering.Services.SupplierB;
-using Stroopwafels.Ordering.Services.SupplierC;
+using Stroopwafels.Application.Domain;
+using Stroopwafels.Infrastructure.Services.SupplierA;
+using Stroopwafels.Infrastructure.Services.SupplierB;
+using Stroopwafels.Infrastructure.Services.SupplierC;
 
 namespace Stroopwafels.Web
 {

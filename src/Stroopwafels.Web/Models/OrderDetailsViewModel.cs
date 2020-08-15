@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Stroopwafels.Ordering;
+using Stroopwafels.Application.Domain;
 
 namespace Stroopwafels.Web.Models
 {

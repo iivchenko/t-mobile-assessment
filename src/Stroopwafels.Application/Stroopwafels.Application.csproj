@@ -6,15 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="MediatR" Version="8.1.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Stroopwafels.Infrastructure\Stroopwafels.Infrastructure.csproj" />
-    <ProjectReference Include="..\Stroopwafels.Ordering\Stroopwafels.Ordering.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Services\" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
 </Project>

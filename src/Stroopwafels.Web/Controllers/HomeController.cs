@@ -5,12 +5,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Stroopwafels.Ordering;
+using Stroopwafels.Application.Domain;
 using Stroopwafels.Application.Commands;
 using Stroopwafels.Application.Queries;
-using Stroopwafels.Ordering.Services;
 using Stroopwafels.Web.Models;
 using MediatR;
+using Stroopwafels.Application.Domain;
 
 namespace Stroopwafels.Web.Controllers
 {
@@ -68,7 +68,7 @@ namespace Stroopwafels.Web.Controllers
             return Index();
         }
 
-        private async Task<IEnumerable<Ordering.Quote>> GetQuotesFor(IList<KeyValuePair<StroopwafelType, int>> orderDetails)
+        private async Task<IEnumerable<Stroopwafels.Application.Domain.Quote>> GetQuotesFor(IList<KeyValuePair<StroopwafelType, int>> orderDetails)
         {
             var query = new QuotesQuery(orderDetails);
 
