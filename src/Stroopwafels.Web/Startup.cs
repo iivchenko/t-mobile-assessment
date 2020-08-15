@@ -1,13 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Stroopwafels.Application.Queries;
+using Stroopwafels.Ordering;
+using Stroopwafels.Ordering.Services;
 
 namespace Stroopwafels.Web
 {
@@ -24,6 +24,15 @@ namespace Stroopwafels.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            // TODO: hack. looks like mediator can't see handlers if rsponse types are in diffreent library
+            services.AddMediatR(typeof(QuotesQueryHandler).Assembly);
+
+            services.AddScoped<IHttpClientWrapper, HttpClientWrapper>();
+
+            services.AddScoped<IStroopwafelSupplierService, StroopwafelSupplierAService>();
+            services.AddScoped<IStroopwafelSupplierService, StroopwafelSupplierBService>();
+            services.AddScoped<IStroopwafelSupplierService, StroopwafelSupplierCService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,12 +1,10 @@
-﻿using System;
+﻿using MediatR;
+using Stroopwafels.Ordering;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Stroopwafels.Ordering.Queries
+namespace Stroopwafels.Application.Queries
 {
-    public class QuotesQuery
+    public sealed class QuotesQuery : IRequest<IEnumerable<Quote>>
     {
         public IList<KeyValuePair<StroopwafelType, int>> OrderLines { get; }
 

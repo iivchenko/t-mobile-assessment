@@ -1,10 +1,14 @@
-﻿using System;
+﻿using MediatR;
+using Stroopwafels.Ordering;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace Stroopwafels.Ordering.Commands
+namespace Stroopwafels.Application.Commands
 {
-    public class OrderCommandHandler
+    public sealed class OrderCommandHandler : IRequestHandler<OrderCommand, Unit>
     {
         private readonly IEnumerable<IStroopwafelSupplierService> _stroopwafelSupplierServices;
 
@@ -13,13 +17,16 @@ namespace Stroopwafels.Ordering.Commands
             _stroopwafelSupplierServices = stroopwafelSupplierServices;
         }
 
-        public void Handle(OrderCommand command)
+        public Task<Unit> Handle(OrderCommand command, CancellationToken cancellationToken)
         {
+            // TODO: make async
             var stroopwafelSupplierService = this._stroopwafelSupplierServices.Single(
                 service =>
                     service.Supplier.Name.Equals(command.Supplier, StringComparison.InvariantCultureIgnoreCase));
 
             stroopwafelSupplierService.Order(command.OrderLines);
+
+            return Unit.Task;
         }
     }
 }

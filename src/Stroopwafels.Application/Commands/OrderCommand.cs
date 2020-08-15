@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using MediatR;
+using Stroopwafels.Ordering;
+using System.Collections.Generic;
 
-namespace Stroopwafels.Ordering.Commands
+namespace Stroopwafels.Application.Commands
 {
-    public class OrderCommand
+    public sealed class OrderCommand : IRequest<Unit>
     {
         public IList<KeyValuePair<StroopwafelType, int>> OrderLines { get; }
 

@@ -6,32 +6,23 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Stroopwafels.Ordering;
-using Stroopwafels.Ordering.Commands;
-using Stroopwafels.Ordering.Queries;
+using Stroopwafels.Application.Commands;
+using Stroopwafels.Application.Queries;
 using Stroopwafels.Ordering.Services;
 using Stroopwafels.Web.Models;
+using MediatR;
 
 namespace Stroopwafels.Web.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IMediator _mediator;
         private readonly ILogger<HomeController> _logger;
-        private readonly QuotesQueryHandler _quotesQueryHandler;
-        private readonly OrderCommandHandler _orderCommandHandler;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IMediator mediator, ILogger<HomeController> logger)
         {
+            _mediator = mediator;
             _logger = logger;
-
-            var httpClientWrapper = new HttpClientWrapper();
-            var suppliers = new IStroopwafelSupplierService[]
-            {
-                new StroopwafelSupplierAService(httpClientWrapper),
-                new StroopwafelSupplierBService(httpClientWrapper),
-                new StroopwafelSupplierCService(httpClientWrapper)
-            };
-            this._quotesQueryHandler = new QuotesQueryHandler(suppliers);
-            this._orderCommandHandler = new OrderCommandHandler(suppliers);
         }
 
         public IActionResult Index()
@@ -52,12 +43,12 @@ namespace Stroopwafels.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult GetQuotes(OrderDetailsViewModel formModel)
+        public async Task<IActionResult> GetQuotes(OrderDetailsViewModel formModel)
         {
             if (this.ModelState.IsValid)
             {
-                var orderDetails = this.GetOrderDetails(formModel.OrderRows);
-                var quotes = this.GetQuotesFor(orderDetails);
+                var orderDetails = GetOrderDetails(formModel.OrderRows);
+                var quotes = await GetQuotesFor(orderDetails);
 
                 var viewModel = new QuoteViewModel();
                 foreach (var quote in quotes)
@@ -77,12 +68,11 @@ namespace Stroopwafels.Web.Controllers
             return Index();
         }
 
-        private IList<Ordering.Quote> GetQuotesFor(IList<KeyValuePair<StroopwafelType, int>> orderDetails)
+        private async Task<IEnumerable<Ordering.Quote>> GetQuotesFor(IList<KeyValuePair<StroopwafelType, int>> orderDetails)
         {
             var query = new QuotesQuery(orderDetails);
 
-            IList<Ordering.Quote> orders = this._quotesQueryHandler.Handle(query);
-            return orders;
+            return await _mediator.Send(query);
         }
 
         private IList<KeyValuePair<StroopwafelType, int>> GetOrderDetails(IList<OrderRow> orderRows)
@@ -90,14 +80,14 @@ namespace Stroopwafels.Web.Controllers
             return orderRows.Select(orderRow => new KeyValuePair<StroopwafelType, int>(orderRow.Type, orderRow.Amount)).ToList();
         }
 
-        public IActionResult MakeOrder(QuoteViewModel formModel)
+        public async Task<IActionResult> MakeOrder(QuoteViewModel formModel)
         {
             if (this.ModelState.IsValid)
             {
                 var orderDetails = this.GetOrderDetails(formModel.OrderRows);
 
                 var command = new OrderCommand(orderDetails, formModel.SelectedSupplier);
-                this._orderCommandHandler.Handle(command);
+                await _mediator.Send(command);
 
                 return View("_OrderSeccessful");
             }
