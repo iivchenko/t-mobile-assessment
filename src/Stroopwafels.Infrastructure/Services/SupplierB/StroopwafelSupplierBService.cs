@@ -71,5 +71,10 @@ namespace Stroopwafels.Infrastructure.Services.SupplierB
 
             await _client.Order(supplierOrder);
         }
+
+        public Task<TimeSpan> GetDeliveryPeriod()
+        {
+            return Task.FromResult(TimeSpan.FromDays(3));
+        }
     }
 }

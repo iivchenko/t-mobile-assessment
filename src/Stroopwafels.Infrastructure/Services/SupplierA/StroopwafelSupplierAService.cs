@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Stroopwafels.Application.Domain;
 using Stroopwafels.Application.Services;
+using System;
 
 namespace Stroopwafels.Infrastructure.Services.SupplierA
 {
@@ -39,6 +40,11 @@ namespace Stroopwafels.Infrastructure.Services.SupplierA
             var supplierOrder = _mapper.Map<SupplierAOrder>(order);
 
             await _client.Order(supplierOrder);
+        }
+
+        public Task<TimeSpan> GetDeliveryPeriod()
+        {
+            return Task.FromResult(TimeSpan.FromDays(4));
         }
     }
 }
