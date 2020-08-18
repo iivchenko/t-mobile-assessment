@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Stroopwafels.Application.Commands.PlaceOrder;
-using Stroopwafels.Application.Queries;
 using Stroopwafels.Web.Models;
 using MediatR;
+using Stroopwafels.Application.Queries.GetQuotes;
 
 namespace Stroopwafels.Web.Controllers
 {
@@ -43,7 +43,7 @@ namespace Stroopwafels.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var query = new QuotesQuery
+                var query = new GetQuotesQuery
                 {
                     Items = model.OrderLines.Select(orderRow => new QuotesItem { Amount = orderRow.Amount, Type = orderRow.Type }),
                     Customer = new QuotesCustomer

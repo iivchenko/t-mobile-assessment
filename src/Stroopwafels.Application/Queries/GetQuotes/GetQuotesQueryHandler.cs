@@ -8,18 +8,18 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Stroopwafels.Application.Queries
+namespace Stroopwafels.Application.Queries.GetQuotes
 {
-    public sealed class QuotesQueryHandler : IRequestHandler<QuotesQuery, QuotesQueryResponse>
+    public sealed class GetQuotesQueryHandler : IRequestHandler<GetQuotesQuery, GetQuotesQueryResponse>
     {
         private readonly IEnumerable<IStroopwafelSupplierService> _stroopwafelSupplierServices;
 
-        public QuotesQueryHandler(IEnumerable<IStroopwafelSupplierService> stroopwafelSupplierServices)
+        public GetQuotesQueryHandler(IEnumerable<IStroopwafelSupplierService> stroopwafelSupplierServices)
         {
             _stroopwafelSupplierServices = stroopwafelSupplierServices;
         }
 
-        public Task<QuotesQueryResponse> Handle(QuotesQuery query, CancellationToken cancellationToken)
+        public Task<GetQuotesQueryResponse> Handle(GetQuotesQuery query, CancellationToken cancellationToken)
         {
             var item =
              _stroopwafelSupplierServices
@@ -37,7 +37,7 @@ namespace Stroopwafels.Application.Queries
             return Task.FromResult(Pack(item, query.Customer));
         }
 
-        private IEnumerable<Item> RetrievStroopwafels(IStroopwafelSupplierService service, QuotesQuery query)
+        private IEnumerable<Item> RetrievStroopwafels(IStroopwafelSupplierService service, GetQuotesQuery query)
         {
             var stroopwafels = service.QueryStroopwafels().GetAwaiter().GetResult();
 
@@ -105,11 +105,11 @@ namespace Stroopwafels.Application.Queries
             return (price + items.Count(), items);
         }
 
-        private QuotesQueryResponse Pack((decimal, IEnumerable<Item>) item, QuotesCustomer customer)
+        private GetQuotesQueryResponse Pack((decimal, IEnumerable<Item>) item, QuotesCustomer customer)
         {
             var (price, items) = item;
 
-            return new QuotesQueryResponse
+            return new GetQuotesQueryResponse
             {
                 CustomerName = customer.Name,
                 WishDate = customer.WishDate,

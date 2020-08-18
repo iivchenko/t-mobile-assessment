@@ -3,9 +3,9 @@ using MediatR;
 using Stroopwafels.Application.Domain;
 using System.Collections.Generic;
 
-namespace Stroopwafels.Application.Queries
+namespace Stroopwafels.Application.Queries.GetQuotes
 {
-    public sealed class QuotesQuery : IRequest<QuotesQueryResponse>
+    public sealed class GetQuotesQuery : IRequest<GetQuotesQueryResponse>
     {
         public IEnumerable<QuotesItem> Items { get; set; }
 

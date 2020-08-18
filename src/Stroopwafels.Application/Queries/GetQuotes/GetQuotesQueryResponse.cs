@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace Stroopwafels.Application.Queries
+namespace Stroopwafels.Application.Queries.GetQuotes
 {
-    public sealed class QuotesQueryResponse
+    public sealed class GetQuotesQueryResponse
     {
         public string CustomerName { get; set; }
 

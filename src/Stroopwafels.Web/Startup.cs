@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Refit;
-using Stroopwafels.Application.Queries;
+using Stroopwafels.Application.Queries.GetQuotes;
 using Stroopwafels.Application.Services;
 using Stroopwafels.Infrastructure.Services.SupplierA;
 using Stroopwafels.Infrastructure.Services.SupplierB;
@@ -31,7 +31,7 @@ namespace Stroopwafels.Web
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             // TODO: hack. looks like mediator can't see handlers if rsponse types are in different library
-            services.AddMediatR(typeof(QuotesQueryHandler).Assembly);
+            services.AddMediatR(typeof(GetQuotesQueryHandler).Assembly);
 
             services
                 .AddRefitClient<ISupplierAClient>()
