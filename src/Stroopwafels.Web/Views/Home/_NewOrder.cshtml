@@ -1,0 +1,50 @@
+﻿@model Stroopwafels.Web.Models.NewOrderViewModel
+@{
+    ViewBag.Title = "Stroopwafels bestellen";
+}
+
+<div class="jumbotron">
+    <h1>Stroopwafels bestellen</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="CalculateOrder" asp-controller="Home"
+              data-ajax="true"
+              data-ajax-method="POST"
+              data-ajax-mode="replace"
+              data-ajax-update="#orderBody">
+
+            <p>
+                Voer hier uw bestelling in:
+
+                <div class="row">
+                    <div>@Html.LabelFor(m => m.CustomerName)</div>
+                    <div id="customerName">@Html.TextBoxFor(m => m.CustomerName)</div>
+                </div>
+
+                <div class="row">
+                    <div>@Html.LabelFor(m => m.WishDate)</div>
+                    <input class="datefield" data-val="true" data-val-required="Date is required" id="WishDate" name="WishDate" type="date" value="1/11/1989" />
+                </div>
+
+                @for (var i = 0; i < Model.OrderLines.Count; i++)
+                {
+                    @Html.HiddenFor(m => Model.OrderLines[i].Type);
+                    <div class="row">
+                        <div>@Html.Label(Model.OrderLines[i].Type.ToString())</div>
+                        <div>@Html.TextBoxFor(m => Model.OrderLines[i].Amount)</div>
+                    </div>
+                }
+            </p>
+            <p>
+                <input type="submit" value="Bestellen" class="btn btn-default" />
+            </p>
+        </form>
+    </div>
+    
+</div>
+
+@section Scripts  {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

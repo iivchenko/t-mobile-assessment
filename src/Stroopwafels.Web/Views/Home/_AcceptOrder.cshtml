@@ -1,0 +1,53 @@
+﻿@model Stroopwafels.Web.Models.OrderViewModel
+@{ ViewBag.Title = "Controleer uw bestelling"; }
+
+<div class="jumbotron">
+    <h1>Controleer uw bestelling</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+
+        <form asp-action="PlaceOrder" asp-controller="Home"
+              data-ajax="true"
+              data-ajax-method="POST"
+              data-ajax-mode="replace"
+              data-ajax-update="#orderBody">
+
+            <p>
+                Voer hier uw bestelling in:
+
+                <div class="row">
+                    <div>@Html.LabelFor(m => m.CustomerName): @Html.TextBoxFor(m => m.CustomerName, new { @readonly = "readonly" })</div>
+                </div>
+
+                <div class="row">
+                    <div>@Html.LabelFor(m => m.WishDate): @Html.TextBoxFor(m => m.WishDate, new { @readonly = "readonly" })</div>
+                </div>
+
+                @for (var i = 0; i < Model.OrderLines.Length; i++)
+                {
+                    @Html.HiddenFor(m => Model.OrderLines[i].Type);
+                    @Html.HiddenFor(m => Model.OrderLines[i].Supplier);
+                    <div class="row">
+                        <div>@Html.Label(Model.OrderLines[i].Type.ToString()): @Html.TextBoxFor(m => Model.OrderLines[i].Amount, new { @readonly = "readonly" })</div>
+                    </div> 
+                }
+
+                <div class="row">
+                    <div>@Html.LabelFor(m => m.TotalPrice): @Html.TextBoxFor(m => m.TotalPrice, new { @readonly = "readonly" })</div>
+                </div>
+
+            </p>
+            <p>
+                <input type="submit" value="Bestellen" class="btn btn-default" />
+            </p>
+        </form>
+    </div>
+
+</div>
+
+
+@section Scripts  {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

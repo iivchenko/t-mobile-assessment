@@ -1,6 +1,4 @@
-﻿@{
-    ViewBag.Title = "Peter Stroopwafel";
-}
+﻿@{ ViewBag.Title = "Peter Stroopwafel"; }
 
 <!-- Markt Grid Section -->
 <section id="markt">
@@ -81,10 +79,10 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12 text-center">
-                <img class="img-responsive img-centered img-circle" src="/Content/peter.jpg" alt="" style="max-width: 350px;"/>
+                <img class="img-responsive img-centered img-circle" src="/Content/peter.jpg" alt="" style="max-width: 350px;" />
             </div>
         </div>
-        <br/>
+        <br />
         <div class="row">
             <div class="col-lg-12 text-center">
                 <h2>Over Peter</h2>
@@ -102,13 +100,9 @@
     </div>
 </section>
 
-<section class="" id="order-online">
-    @await Html.PartialAsync("_Order", new OrderDetailsViewModel())
-</section>
-
 @section modals
 {
-     <!-- Portfolio Modals -->
+    <!-- Portfolio Modals -->
     <div class="portfolio-modal modal fade" id="portfolioModal1" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-content">
             <div class="close-modal" data-dismiss="modal">
@@ -299,4 +293,30 @@
             </div>
         </div>
     </div>
+
+    <div class="portfolio-modal modal fade" id="orderModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div id="orderBody" class="modal-body">
+
+                            @await Html.PartialAsync("_NewOrder", new NewOrderViewModel())
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts  {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
 }

@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Stroopwafels.Application.Domain;
-using Stroopwafels.Application.Commands;
+using Stroopwafels.Application.Commands.PlaceOrder;
 using Stroopwafels.Application.Queries;
 using Stroopwafels.Web.Models;
 using MediatR;
-using Stroopwafels.Application.Domain;
 
 namespace Stroopwafels.Web.Controllers
 {
@@ -37,59 +32,71 @@ namespace Stroopwafels.Web.Controllers
 
         public ActionResult Order()
         {
-            var viewModel = new OrderDetailsViewModel();
+            var viewModel = new NewOrderViewModel();
 
             return PartialView(viewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetQuotes(OrderDetailsViewModel formModel)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CalculateOrder(NewOrderViewModel model)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                var orderDetails = GetOrderDetails(formModel.OrderRows);
-                var quotes = await GetQuotesFor(orderDetails);
-
-                var viewModel = new QuoteViewModel();
-                foreach (var quote in quotes)
+                var query = new QuotesQuery
                 {
-                    viewModel.Quotes.Add(new Models.Quote
+                    Items = model.OrderLines.Select(orderRow => new QuotesItem { Amount = orderRow.Amount, Type = orderRow.Type }),
+                    Customer = new QuotesCustomer
                     {
-                        SupplierName = quote.Supplier,
-                        TotalAmount = quote.TotalPrice.ToString("C")
-                    });
-                }
+                        Name = model.CustomerName,
+                        WishDate = model.WishDate
+                    }
+                };
 
-                viewModel.OrderRows = formModel.OrderRows;
-                viewModel.SelectedSupplier = quotes.OrderBy(q => q.TotalPrice).First().Supplier;
+                var quote = await _mediator.Send(query);
 
-                return View("_Quotes", viewModel);
+                var viewModel = new OrderViewModel
+                {
+                    CustomerName = quote.CustomerName,
+                    TotalPrice = quote.TotalPrice,
+                    WishDate = quote.WishDate,
+                    OrderLines = quote.Items.Select(x => new OrderLineViewModel
+                    {
+                        Amount = x.Amount,
+                        Type = x.Type,
+                        Supplier = x.Supplier
+                    }).ToArray()
+                };
+
+                return PartialView("_AcceptOrder", viewModel);
             }
             return Index();
         }
 
-        private async Task<IEnumerable<QuotesQueryResponse>> GetQuotesFor(IList<KeyValuePair<StroopwafelType, int>> orderDetails)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PlaceOrder(OrderViewModel model)
         {
-            var query = new QuotesQuery(orderDetails);
-
-            return await _mediator.Send(query);
-        }
-
-        private IList<KeyValuePair<StroopwafelType, int>> GetOrderDetails(IList<OrderRow> orderRows)
-        {
-            return orderRows.Select(orderRow => new KeyValuePair<StroopwafelType, int>(orderRow.Type, orderRow.Amount)).ToList();
-        }
-
-        public async Task<IActionResult> MakeOrder(QuoteViewModel formModel)
-        {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                var orderDetails = this.GetOrderDetails(formModel.OrderRows);
+                var command = new PlaceOrderCommand
+                {
+                    Customer = new PlaceOrderCustomer
+                    {
+                        Name = model.CustomerName,
+                        WishDate = model.WishDate
+                    },
+                    Items = model.OrderLines.Select(x => new PlaceOrderItem
+                    {
+                        Amount = x.Amount,
+                        Type = x.Type,
+                        Supplier = x.Supplier
+                    })
+                };
 
-                var command = new OrderCommand(orderDetails, formModel.SelectedSupplier);
                 await _mediator.Send(command);
 
-                return View("_OrderSeccessful");
+                return PartialView("_OrderSeccessful");
             }
 
             return Index();

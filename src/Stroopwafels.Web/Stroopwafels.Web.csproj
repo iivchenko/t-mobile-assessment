@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.0.1" />
+    <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
     <PackageReference Include="Refit.HttpClientFactory" Version="5.1.67" />
   </ItemGroup>
@@ -23,6 +24,12 @@
   <ItemGroup>
     <ProjectReference Include="..\Stroopwafels.Application\Stroopwafels.Application.csproj" />
     <ProjectReference Include="..\Stroopwafels.Infrastructure\Stroopwafels.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="package.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
