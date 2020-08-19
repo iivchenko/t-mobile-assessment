@@ -2,7 +2,7 @@
 
 namespace Stroopwafels.Application.Domain
 {
-    public class Order
+    public sealed class Order
     {
         public IEnumerable<OrderLine> ProductsAndAmounts { get; set; }
     }

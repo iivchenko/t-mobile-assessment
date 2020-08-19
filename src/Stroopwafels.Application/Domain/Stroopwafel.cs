@@ -1,6 +1,6 @@
 ﻿namespace Stroopwafels.Application.Domain
 {
-    public class Stroopwafel
+    public sealed class Stroopwafel
     {
         public StroopwafelType Type { get; set; }
 

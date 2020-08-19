@@ -28,13 +28,13 @@ namespace Stroopwafels.Application.Queries.GetQuotes
                  .GroupBy(x => x.Type)
                  .CartesianProduct()
                  .Where(SatisfyDelivery)
-                 .Where(x => SatisfyWishDate(x, query.Customer.WishDate))
+                 .Where(x => SatisfyWishDate(x, query.WishDate))
                  .Select(CalculatePrice)
                  .Select(AddBenefit)
                  .OrderBy(x => x.price)
                  .FirstOrDefault();
 
-            return Task.FromResult(Pack(item, query.Customer));
+            return Task.FromResult(Pack(item, query.CustomerName, query.WishDate));
         }
 
         private IEnumerable<Item> RetrievStroopwafels(IStroopwafelSupplierService service, GetQuotesQuery query)
@@ -49,7 +49,7 @@ namespace Stroopwafels.Application.Queries.GetQuotes
             var items = new List<Item>();
             var now = DateTime.UtcNow;
 
-            foreach (var orderLine in query.Items)
+            foreach (var orderLine in query.OrderLines)
             {
                 var supplier = service.GetName().GetAwaiter().GetResult();
                 var period = service.GetDeliveryPeriod().GetAwaiter().GetResult();
@@ -105,16 +105,16 @@ namespace Stroopwafels.Application.Queries.GetQuotes
             return (price + items.Count(), items);
         }
 
-        private GetQuotesQueryResponse Pack((decimal, IEnumerable<Item>) item, QuotesCustomer customer)
+        private GetQuotesQueryResponse Pack((decimal, IEnumerable<Item>) item, string customerName, DateTime wishDate)
         {
             var (price, items) = item;
 
             return new GetQuotesQueryResponse
             {
-                CustomerName = customer.Name,
-                WishDate = customer.WishDate,
+                CustomerName = customerName,
+                WishDate = wishDate,
                 TotalPrice = price,
-                Items = items.Select(x => new QuotesQueryItem
+                OrderLines = items.Select(x => new QuotesQueryItem
                 {
                     TotalPrice = x.TotalPrice,
                     Amount = x.Amount,

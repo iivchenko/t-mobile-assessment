@@ -10,9 +10,9 @@ namespace Stroopwafels.Application.Queries.GetQuotes
 
         public DateTime WishDate { get; set; }
 
-        public decimal TotalPrice { get; internal set; }
+        public decimal TotalPrice { get; set; }
 
-        public IEnumerable<QuotesQueryItem> Items { get; internal set; }
+        public IEnumerable<QuotesQueryItem> OrderLines { get; set; }
     }
 
     public sealed class QuotesQueryItem
@@ -21,10 +21,10 @@ namespace Stroopwafels.Application.Queries.GetQuotes
 
         public StroopwafelType Type { get; set; }
 
-        public int Amount { get; internal set; }
+        public int Amount { get; set; }
 
-        public decimal ItemPrice { get; internal set; }
+        public decimal ItemPrice { get; set; }
 
-        public decimal TotalPrice { get; internal set; }
+        public decimal TotalPrice { get; set; }
     }
 }

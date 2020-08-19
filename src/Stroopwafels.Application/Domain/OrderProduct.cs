@@ -1,21 +1,9 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-
-namespace Stroopwafels.Application.Domain
+﻿namespace Stroopwafels.Application.Domain
 {
-    public class OrderProduct
+    public sealed class OrderProduct
     {
-        [JsonConverter(typeof(StringEnumConverter))]
-        public StroopwafelType Type { get; }
+        public StroopwafelType Type { get; set; }
 
-        [JsonProperty(PropertyName = "Merk")]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public Brand Brand { get; }
-
-        public OrderProduct(StroopwafelType type)
-        {
-            this.Type = type;
-            this.Brand = Brand.Stroopie;
-        }
+        public Brand Brand { get; set; }
     }
 }

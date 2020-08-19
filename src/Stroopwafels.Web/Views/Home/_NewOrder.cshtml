@@ -28,7 +28,7 @@
                     <input class="datefield" data-val="true" data-val-required="Date is required" id="WishDate" name="WishDate" type="date" value="1/11/1989" />
                 </div>
 
-                @for (var i = 0; i < Model.OrderLines.Count; i++)
+                @for (var i = 0; i < Model.OrderLines.Length; i++)
                 {
                     @Html.HiddenFor(m => Model.OrderLines[i].Type);
                     <div class="row">

@@ -9,7 +9,6 @@ namespace Stroopwafels.Web.Models
         public int Amount { get; set; }
 
         [Required]
-        [Display(Name = "Stroopwafel")]
         public StroopwafelType Type { get; set; }
 
         [Required]

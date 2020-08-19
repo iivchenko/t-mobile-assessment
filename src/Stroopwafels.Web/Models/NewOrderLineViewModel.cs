@@ -3,7 +3,7 @@ using Stroopwafels.Application.Domain;
 
 namespace Stroopwafels.Web.Models
 {
-    public class NewOrderLineViewModel
+    public sealed class NewOrderLineViewModel
     {
         public NewOrderLineViewModel()
         { 
@@ -19,7 +19,6 @@ namespace Stroopwafels.Web.Models
         public int Amount { get; set; }
 
         [Required]
-        [Display(Name = "Stroopwafel")]
         public StroopwafelType Type { get; set; }
     }
 }

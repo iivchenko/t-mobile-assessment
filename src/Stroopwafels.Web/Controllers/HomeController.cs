@@ -1,31 +1,28 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Stroopwafels.Application.Commands.PlaceOrder;
 using Stroopwafels.Web.Models;
 using MediatR;
 using Stroopwafels.Application.Queries.GetQuotes;
+using AutoMapper;
 
 namespace Stroopwafels.Web.Controllers
 {
     public class HomeController : Controller
     {
         private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(IMediator mediator, ILogger<HomeController> logger)
+        public HomeController(IMediator mediator, IMapper mapper, ILogger<HomeController> logger)
         {
             _mediator = mediator;
+            _mapper = mapper;
             _logger = logger;
         }
 
         public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Privacy()
         {
             return View();
         }
@@ -43,31 +40,9 @@ namespace Stroopwafels.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var query = new GetQuotesQuery
-                {
-                    Items = model.OrderLines.Select(orderRow => new QuotesItem { Amount = orderRow.Amount, Type = orderRow.Type }),
-                    Customer = new QuotesCustomer
-                    {
-                        Name = model.CustomerName,
-                        WishDate = model.WishDate
-                    }
-                };
-
+                var query = _mapper.Map<GetQuotesQuery>(model);
                 var quote = await _mediator.Send(query);
-
-                var viewModel = new OrderViewModel
-                {
-                    CustomerName = quote.CustomerName,
-                    TotalPrice = quote.TotalPrice,
-                    WishDate = quote.WishDate,
-                    OrderLines = quote.Items.Select(x => new OrderLineViewModel
-                    {
-                        Amount = x.Amount,
-                        Type = x.Type,
-                        Supplier = x.Supplier
-                    }).ToArray()
-                };
-
+                var viewModel = _mapper.Map<OrderViewModel>(quote);
                 return PartialView("_AcceptOrder", viewModel);
             }
             return Index();
@@ -79,20 +54,7 @@ namespace Stroopwafels.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var command = new PlaceOrderCommand
-                {
-                    Customer = new PlaceOrderCustomer
-                    {
-                        Name = model.CustomerName,
-                        WishDate = model.WishDate
-                    },
-                    Items = model.OrderLines.Select(x => new PlaceOrderItem
-                    {
-                        Amount = x.Amount,
-                        Type = x.Type,
-                        Supplier = x.Supplier
-                    })
-                };
+                var command = _mapper.Map<PlaceOrderCommand>(model);
 
                 await _mediator.Send(command);
 

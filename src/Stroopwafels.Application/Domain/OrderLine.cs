@@ -1,15 +1,9 @@
 namespace Stroopwafels.Application.Domain
 {
-    public class OrderLine
+    public sealed class OrderLine
     {
-        public int Amount { get; }
+        public int Amount { get; set; }
         
-        public OrderProduct Product { get; }
-
-        public OrderLine(int amount, OrderProduct product)
-        {
-            this.Amount = amount;
-            this.Product = product;
-        }
+        public OrderProduct Product { get; set; }
     }
 }

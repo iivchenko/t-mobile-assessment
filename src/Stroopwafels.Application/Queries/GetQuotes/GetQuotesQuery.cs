@@ -7,23 +7,17 @@ namespace Stroopwafels.Application.Queries.GetQuotes
 {
     public sealed class GetQuotesQuery : IRequest<GetQuotesQueryResponse>
     {
-        public IEnumerable<QuotesItem> Items { get; set; }
+        public string CustomerName { get; set; }
 
-        public QuotesCustomer Customer { get; set; }
+        public DateTime WishDate { get; set; }
 
+        public IEnumerable<QuotesOrderLine> OrderLines { get; set; }
     }
 
-    public sealed class QuotesItem
+    public sealed class QuotesOrderLine
     {
         public StroopwafelType Type { get; set; }
 
         public int Amount { get; set; }
-    }
-
-    public sealed class QuotesCustomer
-    {
-        public string Name { get; set; }
-
-        public DateTime WishDate { get; set; }
     }
 }
