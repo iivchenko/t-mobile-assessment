@@ -22,12 +22,9 @@ namespace Stroopwafels.Infrastructure.Services.SupplierB
             new DateTime(2016, 1, 1),
             new DateTime(2016, 12, 25),
             new DateTime(2016, 12, 26)
-        }; 
+        };
 
-        public Task<string> GetName()
-        {
-            return Task.FromResult("Leverancier B");
-        }
+        public string Name => "Leverancier B";
 
         public Task<decimal> CalculateShipingCost(decimal totalPrice)
         {

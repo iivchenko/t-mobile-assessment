@@ -51,7 +51,7 @@ namespace Stroopwafels.Application.Queries.GetQuotes
 
             foreach (var orderLine in query.OrderLines)
             {
-                var supplier = service.GetName().GetAwaiter().GetResult();
+                var supplier = service.Name;
                 var period = service.GetDeliveryPeriod().GetAwaiter().GetResult();
                 var stroopwafel = stroopwafels.First(s => s.Type == orderLine.Type);
                 var item = new Item
@@ -84,7 +84,7 @@ namespace Stroopwafels.Application.Queries.GetQuotes
 
         private (decimal price, IEnumerable<Item> combination) CalculatePrice(IEnumerable<Item> items)
         {
-            var suppliers = _stroopwafelSupplierServices.Select(x => (name: x.GetName().GetAwaiter().GetResult(), service: x));
+            var suppliers = _stroopwafelSupplierServices.Select(x => (name: x.Name, service: x));
 
             var price = items
                 .GroupBy(x => x.Supplier)

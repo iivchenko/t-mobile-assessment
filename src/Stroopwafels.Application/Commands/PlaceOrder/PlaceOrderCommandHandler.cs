@@ -24,7 +24,7 @@ namespace Stroopwafels.Application.Commands.PlaceOrder
         {
             foreach(var group in command.OrderLines.GroupBy(x => x.Supplier))
             {
-                var supplier = _services.First(x => x.GetName().GetAwaiter().GetResult() == group.Key);
+                var supplier = _services.First(x => x.Name == group.Key);
 
                 var order = new Order
                 {

@@ -20,10 +20,7 @@ namespace Stroopwafels.Infrastructure.Services.SupplierC
             _mapper = mapper;
         }
 
-        public Task<string> GetName()
-        {
-            return Task.FromResult("Leverancier C");
-        }
+        public string Name => "Leverancier C";
 
         public Task<decimal> CalculateShipingCost(decimal totalPrice)
         {

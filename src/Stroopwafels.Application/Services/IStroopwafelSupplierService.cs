@@ -7,9 +7,9 @@ namespace Stroopwafels.Application.Services
 {
     public interface IStroopwafelSupplierService
     {
-        Task<TimeSpan> GetDeliveryPeriod();
+        string Name { get; }
 
-        Task<string> GetName();
+        Task<TimeSpan> GetDeliveryPeriod();
 
         Task<decimal> CalculateShipingCost(decimal totalPrice);
 
