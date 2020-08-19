@@ -19,40 +19,40 @@ namespace Stroopwafels.Application.Queries.GetQuotes
             _stroopwafelSupplierServices = stroopwafelSupplierServices;
         }
 
-        public Task<GetQuotesQueryResponse> Handle(GetQuotesQuery query, CancellationToken cancellationToken)
+        public async Task<GetQuotesQueryResponse> Handle(GetQuotesQuery query, CancellationToken cancellationToken)
         {
             var item =
-             _stroopwafelSupplierServices
-                 .Select(x => RetrievStroopwafels(x, query))
-                 .SelectMany(x => x)
-                 .GroupBy(x => x.Type)
-                 .CartesianProduct()
-                 .Where(SatisfyDelivery)
-                 .Where(x => SatisfyWishDate(x, query.WishDate))
-                 .Select(CalculatePrice)
-                 .Select(AddBenefit)
-                 .OrderBy(x => x.price)
-                 .FirstOrDefault();
+                await
+                _stroopwafelSupplierServices
+                    .ToAsyncEnumerable()
+                    .Select(x => RetrievStroopwafels(x, query))
+                    .SelectMany(x => x)
+                    .GroupBy(x => x.Type)
+                    .CartesianProduct()
+                    .WhereAwait(SatisfyDelivery)
+                    .WhereAwait(x => SatisfyWishDate(x, query.WishDate))
+                    .SelectAwait(CalculatePrice)
+                    .SelectAwait(AddBenefit)
+                    .OrderBy(x => x.price)
+                    .FirstOrDefaultAsync();
 
-            return Task.FromResult(Pack(item, query.CustomerName, query.WishDate));
+            return Pack(item, query.CustomerName, query.WishDate);
         }
 
-        private IEnumerable<Item> RetrievStroopwafels(IStroopwafelSupplierService service, GetQuotesQuery query)
+        private async IAsyncEnumerable<Item> RetrievStroopwafels(IStroopwafelSupplierService service, GetQuotesQuery query)
         {
-            var stroopwafels = service.QueryStroopwafels().GetAwaiter().GetResult();
-
-            if (!stroopwafels.Any())
-            {
-                return Enumerable.Empty<Item>();
-            }
-
-            var items = new List<Item>();
+            var stroopwafels = await service.QueryStroopwafels();
             var now = DateTime.UtcNow;
+
+            if (stroopwafels == null)
+            {
+                yield break;
+            }
 
             foreach (var orderLine in query.OrderLines)
             {
                 var supplier = service.Name;
-                var period = service.GetDeliveryPeriod().GetAwaiter().GetResult();
+                var period = await service.GetDeliveryPeriod();
                 var stroopwafel = stroopwafels.First(s => s.Type == orderLine.Type);
                 var item = new Item
                 {
@@ -64,48 +64,53 @@ namespace Stroopwafels.Application.Queries.GetQuotes
                     DeliveryDate = now + period,
                 };
 
-                items.Add(item);
+                yield return item;
             }
-
-            return items;
         }
 
-        private bool SatisfyDelivery(IEnumerable<Item> items)
+        private async ValueTask<bool> SatisfyDelivery(IAsyncEnumerable<Item> items)
         {
             var periods = items.Select(x => x.DeliveryDate);
 
-            return periods.Max() - periods.Min() <= TimeSpan.FromDays(1);
+            return (await periods.MaxAsync()) - (await periods.MinAsync()) <= TimeSpan.FromDays(1);
         }
 
-        private bool SatisfyWishDate(IEnumerable<Item> items, DateTime wishDate)
+        private async ValueTask<bool> SatisfyWishDate(IAsyncEnumerable<Item> items, DateTime wishDate)
         {
-            return items.Max(x => x.DeliveryDate) < wishDate;
+            return await (items.MaxAsync(x => x.DeliveryDate)) < wishDate;
         }
 
-        private (decimal price, IEnumerable<Item> combination) CalculatePrice(IEnumerable<Item> items)
+        private async ValueTask<(decimal price, IAsyncEnumerable<Item> combination)> CalculatePrice(IAsyncEnumerable<Item> items)
         {
             var suppliers = _stroopwafelSupplierServices.Select(x => (name: x.Name, service: x));
 
-            var price = items
+            var prices = items
                 .GroupBy(x => x.Supplier)
-                .Select(x =>
+                .Select(async x =>
                 {
-                    var total = x.Sum(y => y.TotalPrice);
-                    var shiping = suppliers.Single(y => y.name == x.Key).service.CalculateShipingCost(total).GetAwaiter().GetResult();
+                    var total = await x.SumAsync(y => y.TotalPrice);
+                    var shiping = await suppliers.Single(y => y.name == x.Key).service.CalculateShipingCost(total);
 
                     return total + shiping;
-                }).Sum();
+                });
+
+            decimal price = 0;
+
+            await foreach (var task in prices)
+            {
+                price += await task;
+            }
 
             return (price, items);
         }
 
-        private (decimal price, IEnumerable<Item> combination) AddBenefit((decimal, IEnumerable<Item>) item)
+        private async ValueTask<(decimal price, IAsyncEnumerable<Item> combination)> AddBenefit((decimal, IAsyncEnumerable<Item>) item)
         {
             var (price, items) = item;
-            return (price + items.Count(), items);
+            return (price + await items.CountAsync(), items);
         }
 
-        private GetQuotesQueryResponse Pack((decimal, IEnumerable<Item>) item, string customerName, DateTime wishDate)
+        private GetQuotesQueryResponse Pack((decimal, IAsyncEnumerable<Item>) item, string customerName, DateTime wishDate)
         {
             var (price, items) = item;
 
@@ -121,7 +126,7 @@ namespace Stroopwafels.Application.Queries.GetQuotes
                     ItemPrice = x.ItemPrice,
                     Supplier = x.Supplier,
                     Type = x.Type
-                })
+                }).ToEnumerable()
             };
         }
 

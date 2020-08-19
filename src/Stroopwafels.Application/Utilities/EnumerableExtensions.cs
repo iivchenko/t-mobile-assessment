@@ -5,20 +5,25 @@ namespace Stroopwafels.Application.Utilities
 {
     public static class EnumerableExtensions
     {
-        public static IEnumerable<IEnumerable<T>> CartesianProduct<T>(this IEnumerable<IEnumerable<T>> sequences)
+        public static async IAsyncEnumerable<IAsyncEnumerable<T>> CartesianProduct<T>(this IAsyncEnumerable<IAsyncEnumerable<T>> sequences)
         {
             if (sequences == null)
             {
-                return Enumerable.Empty<IEnumerable<T>>();
+                yield break;
             }
 
-            IEnumerable<IEnumerable<T>> emptyProduct = new[] { Enumerable.Empty<T>() };
+            IEnumerable<IAsyncEnumerable<T>> emptyProduct = new[] { AsyncEnumerable.Empty<T>() };
 
-            return sequences.Aggregate(
-                emptyProduct,
+            var task = sequences.AggregateAsync(
+                emptyProduct.ToAsyncEnumerable(),
                 (accumulator, sequence) => accumulator.SelectMany(
                     accseq => sequence,
-                    (accseq, item) => accseq.Concat(new[] { item })));
+                    (accseq, item) => accseq.Concat((new[] { item }).ToAsyncEnumerable())));
+
+            await foreach(var combination in await task)
+            {
+                yield return combination;
+            }
         }
     }
 }
